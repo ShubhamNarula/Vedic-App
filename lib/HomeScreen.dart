@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:page_view_indicators/arrow_page_indicator.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 
-class homescreen extends StatefulWidget {
-  const homescreen({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<homescreen> createState() => _homescreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _homescreenState extends State<homescreen> {
-  // late VideoPlayerController _controller;
+class _HomeScreenState extends State<HomeScreen> {
   late YoutubePlayerController _controller;
   final ScrollController listcontroller = ScrollController();
   PageController pageController = PageController(initialPage: 0);
-  int Pagechanged = 0;
+  int pageChange = 0;
   int listPosition = 1;
   final double _height = 100.0;
+
   @override
   void initState() {
     super.initState();
@@ -36,10 +34,11 @@ class _homescreenState extends State<homescreen> {
         ))
       ..addListener(() {});
   }
-void _animateToIndex(int index) {
+
+  void _animateToIndex(int index) {
     listcontroller.animateTo(
       index * _height,
-      duration: Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 200),
       curve: Curves.fastOutSlowIn,
     );
   }
@@ -85,118 +84,51 @@ void _animateToIndex(int index) {
               child: Column(
                 // ignore: prefer_const_literals_to_create_immutables
                 children: [
+                  muteIcon(),
+                  videoPlayer(),
                   const SizedBox(
                     height: 10,
                   ),
-                  // ignore: prefer_const_literals_to_create_immutables
-                  Row(
-                    children: const [
-                      Spacer(),
-                      Icon(
-                        Icons.volume_off,
-                        color: Colors.white,
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                    ],
-                  ),
+                  viewMoreButton(),
                   const SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Container(
-                      height: 200,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.blueAccent)),
-                      child: YoutubePlayer(
-                        controller: _controller,
-                        showVideoProgressIndicator: true,
-                        progressIndicatorColor: Colors.amber,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    height: 30,
-                    width: 100,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.white)),
-                    child: Center(
-                      child: Text(
-                        "View More",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
                     height: 33,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Stack(
-                      children: [
-                        Container(
-                          height: 150,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(40),
-                              border: Border.all(color: Colors.white)),
-                          child: Center(
-                            child: Row(
-                              children: [
-                                // indicatorPager()
-                              ],
-                            ),
-                          ),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [],
-                        ),
-                      ],
-                    ),
-                  ),
+                  stackOverLay(),
                   const SizedBox(
                     height: 30,
                   ),
                   vedicType(),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   buttonMeditation(),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
 
                   bottomVideoList(),
                   // SizedBox(height: 10,),
-                  viewmorebutton(),
-                  SizedBox(
+                  viewMoreButton(),
+                  const SizedBox(
                     height: 5,
                   ),
                   Row(
                     children: [
-                      Spacer(),
+                      const Spacer(),
                       Container(
                         height: 60,
                         width: 60,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(30),
                             color: Colors.orange[700]),
-                        child: Center(
-                          child: Icon(
+                        child: const Center(
+                          child: const Icon(
                             Icons.message,
                             color: Colors.white,
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 20,
                       ),
                     ],
@@ -220,55 +152,103 @@ void _animateToIndex(int index) {
                   ),
                   Container(
                       width: MediaQuery.of(context).size.width - 20,
-                      child: Divider(
+                      child: const Divider(
                         color: Colors.white,
                       )),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   bookList(),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                 ],
               ),
             ),
-            Center(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.41,
-                  ),
-                  Container(
-                    height: 30,
-                    width: 100,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white),
-                    child: Center(child: Text("Waheguru")),
-                  )
-                ],
-              ),
-            ),
+            // Center(
+            //   child: Column(
+            //     children: [
+            //       SizedBox(
+            //         height: MediaQuery.of(context).size.height * 0.41,
+            //       ),
+            //       Container(
+            //         height: 30,
+            //         width: 100,
+            //         decoration: BoxDecoration(
+            //             borderRadius: BorderRadius.circular(10),
+            //             color: Colors.white),
+            //         child: const Center(child: const Text("Waheguru")),
+            //       )
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),
     );
   }
 
-  Widget viewmorebutton() {
+  Widget muteIcon() {
+    return Container(
+        width: double.infinity,
+        margin: EdgeInsets.only(right: 15, top: 5, bottom: 5),
+        alignment: Alignment.topRight,
+        child: Icon(
+          Icons.volume_off,
+          color: Colors.white,
+        ));
+  }
+
+  Widget videoPlayer() {
+    return Container(
+      margin: EdgeInsets.only(left: 20, right: 20),
+      height: 200,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: YoutubePlayer(
+          controller: _controller,
+          showVideoProgressIndicator: true,
+          progressIndicatorColor: Colors.amber,
+        ),
+      ),
+    );
+  }
+
+  Widget viewMoreButton() {
     return Container(
       height: 30,
       width: 100,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: Colors.white)),
-      child: Center(
-        child: Text(
+      child: const Center(
+        child: const Text(
           "View More",
           style: TextStyle(color: Colors.white),
         ),
       ),
+    );
+  }
+
+  Widget stackOverLay() {
+    return Stack(
+      children: [
+        Container(
+          height: 150,
+          margin: EdgeInsets.only(left: 15, right: 15),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(40),
+              border: Border.all(color: Colors.white)),
+          child: Center(
+            child: Row(
+              children: [
+                // indicatorPager()
+              ],
+            ),
+          ),
+        ),
+
+      ],
     );
   }
 
@@ -289,17 +269,18 @@ void _animateToIndex(int index) {
                         color: Colors.black.withOpacity(0.5),
                         spreadRadius: 1,
                         blurRadius: 1,
-                        offset: Offset(0, 3), // changes position of shadow
+                        offset:
+                            const Offset(0, 3), // changes position of shadow
                       ),
                     ]),
                 child: const Center(
                   child: Icon(Icons.mediation_outlined, size: 30),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Text(
+              const Text(
                 "Meditation/Yoga",
                 style: TextStyle(color: Colors.white, fontSize: 12),
               )
@@ -320,20 +301,21 @@ void _animateToIndex(int index) {
                         color: Colors.black.withOpacity(0.5),
                         spreadRadius: 1,
                         blurRadius: 1,
-                        offset: Offset(0, 3), // changes position of shadow
+                        offset:
+                            const Offset(0, 3), // changes position of shadow
                       ),
                     ]),
-                child: Center(
+                child: const Center(
                   child: Icon(
                     Icons.mediation_outlined,
                     size: 30,
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Text(
+              const Text(
                 "Spritual Well- being",
                 style: TextStyle(color: Colors.white, fontSize: 12),
               )
@@ -354,7 +336,8 @@ void _animateToIndex(int index) {
                         color: Colors.black.withOpacity(0.5),
                         spreadRadius: 1,
                         blurRadius: 1,
-                        offset: Offset(0, 3), // changes position of shadow
+                        offset:
+                            const Offset(0, 3), // changes position of shadow
                       ),
                     ]),
                 child: const Center(
@@ -396,26 +379,26 @@ void _animateToIndex(int index) {
   Widget indicatorPager() {
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.only(left: 20, right: 20),
+      margin: const EdgeInsets.only(left: 20, right: 20),
       decoration: BoxDecoration(
           border: Border.all(
             color: Colors.white,
           ),
-          borderRadius: BorderRadius.all(Radius.circular(10))),
+          borderRadius: const BorderRadius.all(const Radius.circular(10))),
       height: 200,
       child: ListView(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         children: <Widget>[
           ArrowPageIndicator(
             isJump: false,
             pageController: _pageController,
             currentPageNotifier: _currentPageNotifier,
-            leftIcon: Icon(
+            leftIcon: const Icon(
               Icons.chevron_left,
               color: Colors.white,
               size: 40,
             ),
-            rightIcon: Icon(
+            rightIcon: const Icon(
               Icons.chevron_right,
               color: Colors.white,
               size: 40,
@@ -427,7 +410,7 @@ void _animateToIndex(int index) {
         ]
             .map((item) => Padding(
                   child: item,
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
                 ))
             .toList(),
       ),
@@ -435,6 +418,7 @@ void _animateToIndex(int index) {
   }
 
   var lengthItem = 0.0;
+
   _buildCircleIndicator2() {
     if (_items.length > 4) {
       lengthItem = (_items.length.toDouble() / 4) as double;
@@ -468,20 +452,21 @@ void _animateToIndex(int index) {
                               width: 130,
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: Color.fromRGBO(226, 154, 44, 0.5),
+                                    color:
+                                        const Color.fromRGBO(226, 154, 44, 0.5),
                                   ),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5))),
-                              child: Icon(
+                                  borderRadius: const BorderRadius.all(
+                                      const Radius.circular(5))),
+                              child: const Icon(
                                 Icons.music_note_outlined,
                                 size: 40,
                                 color: Colors.white,
                               ),
                             ),
-                            Text("data")
+                            const Text("data")
                           ],
                         )),
-                        SizedBox(
+                        const SizedBox(
                           width: 20,
                         ),
                         Expanded(
@@ -492,20 +477,21 @@ void _animateToIndex(int index) {
                               width: 80,
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: Color.fromRGBO(226, 154, 44, 0.5),
+                                    color:
+                                        const Color.fromRGBO(226, 154, 44, 0.5),
                                   ),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5))),
-                              child: Icon(
+                                  borderRadius: const BorderRadius.all(
+                                      const Radius.circular(5))),
+                              child: const Icon(
                                 Icons.music_note_outlined,
                                 size: 40,
                                 color: Colors.white,
                               ),
                             ),
-                            Text("data")
+                            const Text("data")
                           ],
                         )),
-                        SizedBox(
+                        const SizedBox(
                           width: 20,
                         ),
                         Expanded(
@@ -516,20 +502,21 @@ void _animateToIndex(int index) {
                               width: 80,
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: Color.fromRGBO(226, 154, 44, 0.5),
+                                    color:
+                                        const Color.fromRGBO(226, 154, 44, 0.5),
                                   ),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5))),
-                              child: Icon(
+                                  borderRadius: const BorderRadius.all(
+                                      const Radius.circular(5))),
+                              child: const Icon(
                                 Icons.music_note_outlined,
                                 size: 40,
                                 color: Colors.white,
                               ),
                             ),
-                            Text("data")
+                            const Text("data")
                           ],
                         )),
-                        SizedBox(
+                        const SizedBox(
                           width: 20,
                         ),
                         Expanded(
@@ -540,17 +527,18 @@ void _animateToIndex(int index) {
                               width: 80,
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: Color.fromRGBO(226, 154, 44, 0.5),
+                                    color:
+                                        const Color.fromRGBO(226, 154, 44, 0.5),
                                   ),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5))),
-                              child: Icon(
+                                  borderRadius: const BorderRadius.all(
+                                      const Radius.circular(5))),
+                              child: const Icon(
                                 Icons.music_note_outlined,
                                 size: 40,
                                 color: Colors.white,
                               ),
                             ),
-                            Text("data")
+                            const Text("data")
                           ],
                         ))
                       ],
@@ -571,8 +559,8 @@ void _animateToIndex(int index) {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: Colors.white)),
-      child: Center(
-        child: Text(
+      child: const Center(
+        child: const Text(
           "Mediatation",
           style: TextStyle(color: Colors.white),
         ),
@@ -616,8 +604,8 @@ void _animateToIndex(int index) {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30),
                                   color: Colors.orange),
-                              child: Center(
-                                child: Icon(
+                              child: const Center(
+                                child: const Icon(
                                   Icons.play_arrow,
                                   color: Colors.white,
                                   size: 30,
@@ -640,34 +628,32 @@ void _animateToIndex(int index) {
     return Row(
       children: [
         IconButton(
-            onPressed: () {
-              setState(() {
-              if(listcontroller.offset.toInt() == 0){
+          onPressed: () {
+            setState(() {
+              if (listcontroller.offset.toInt() == 0) {
                 listPosition = 0;
               }
-                if(listPosition != 0){
-                listPosition --;
+              if (listPosition != 0) {
+                listPosition--;
                 print(listPosition);
                 _animateToIndex(listPosition);
-                }
-              });
-            },
-             
-           
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            ),
+              }
+            });
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
           ),
+        ),
         Expanded(
           child: Container(
             height: 200,
             child: PageView(
               onPageChanged: (index) {
                 setState(() {
-                  Pagechanged = index;
+                  pageChange = index;
                 });
-                print(Pagechanged);
+                print(pageChange);
               },
               controller: pageController,
               children: [
@@ -677,7 +663,7 @@ void _animateToIndex(int index) {
                   child: Container(
                     height: 200,
                     child: ListView.builder(
-                      controller: listcontroller,
+                        controller: listcontroller,
                         scrollDirection: Axis.horizontal,
                         itemCount: 8,
                         itemBuilder: (context, index) {
@@ -685,12 +671,12 @@ void _animateToIndex(int index) {
                           // listdatachanged = index;
                           return Column(
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 40,
                               ),
                               Row(
                                 children: [
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 20,
                                   ),
                                   Container(
@@ -718,19 +704,18 @@ void _animateToIndex(int index) {
         IconButton(
             onPressed: () {
               setState(() {
-                
                 print(listPosition);
-              if(listcontroller.offset.toInt() == 0){
-                listPosition = 1;
-              }
-                if(listPosition != listcontroller.offset.toInt()){
-                listPosition ++;
-                print(listPosition);
-                _animateToIndex(listPosition);
+                if (listcontroller.offset.toInt() == 0) {
+                  listPosition = 1;
+                }
+                if (listPosition != listcontroller.offset.toInt()) {
+                  listPosition++;
+                  print(listPosition);
+                  _animateToIndex(listPosition);
                 }
               });
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_forward,
               color: Colors.white,
             )),
