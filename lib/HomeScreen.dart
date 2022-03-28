@@ -1,9 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:page_view_indicators/page_view_indicators.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
-
+import 'package:page_view_indicators/arrow_page_indicator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -19,11 +20,14 @@ class _HomeScreenState extends State<HomeScreen> {
   int pageChange = 0;
   int listPosition = 1;
   final double _height = 100.0;
+  final _pageController2 = PageController();
+  final _currentPageNotifier2 = ValueNotifier<int>(0);
+
   // Wheater to loop through elements
   bool _loop = true;
 
   // Scroll controller for carousel
-   late InfiniteScrollController _scrollController;
+  late InfiniteScrollController _scrollController;
 
   // Maintain current index of carousel
   int _selectedIndex = 0;
@@ -34,11 +38,10 @@ class _HomeScreenState extends State<HomeScreen> {
   // Get screen width of viewport.
   double get screenWidth => MediaQuery.of(context).size.width;
 
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _itemExtent = screenWidth-400;
+    _itemExtent = screenWidth;
   }
 
   @override
@@ -46,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
     _scrollController.dispose();
   }
+
   @override
   void initState() {
     _scrollController = InfiniteScrollController(initialItem: _selectedIndex);
@@ -132,13 +136,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-
                   bottomVideoList(),
                   viewMoreButton(),
                   const SizedBox(
                     height: 5,
                   ),
-                   messageIcon(),
+                  messageIcon(),
                   const SizedBox(
                     height: 5,
                   ),
@@ -203,30 +206,77 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget stackOverLay() {
-
     return Stack(
       overflow: Overflow.visible,
       children: [
-
-            Container(
-              height: 150,
-              margin: EdgeInsets.only(left: 15, right: 15),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  border: Border.all(color: Colors.white)),
-              child: Center(
-                child: Row(
-                  children: [
-                    // indicatorPager()
-                  ],
-                ),
+        Container(
+          height: 250,
+          width: MediaQuery.of(context).size.width,
+          margin: EdgeInsets.only(left: 15, right: 15),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(40),
+              border: Border.all(color: Colors.white)),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  ArrowPageIndicator(
+                    iconPadding: EdgeInsets.symmetric(horizontal: 16.0),
+                    isInside: true,
+                    leftIcon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                    ),
+                    rightIcon: const Icon(
+                      Icons.arrow_forward,
+                      color: Colors.white,
+                    ),
+                    pageController: _pageController2,
+                    currentPageNotifier: _currentPageNotifier2,
+                    itemCount: 8,
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        Container(
+                            margin: EdgeInsets.only(left: 20),
+                            height: 120,
+                            width: 90,
+                            decoration: BoxDecoration(
+                              image: const DecorationImage(
+                                  image: AssetImage('lib/asset/images.jpg'),
+                                  fit: BoxFit.cover),
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                            )),
+                        Container(
+                          alignment: Alignment.center,
+                          child: const Text(
+                            'Laal Kitab',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ]
+                    .map((item) => Padding(
+                  child: item,
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                ))
+                    .toList(),
               ),
-            ),
+              buildCircleIndicator()
+            ],
 
+          ),
+        ),
         Positioned(
           top: -15,
-          right: MediaQuery.of(context).size.width/4,
-          left: MediaQuery.of(context).size.width/4,
+          right: MediaQuery.of(context).size.width / 4,
+          left: MediaQuery.of(context).size.width / 4,
           child: Container(
             decoration: BoxDecoration(
               color: Colors.blue,
@@ -249,10 +299,22 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ],
-    );    // return Stack(
-
+    ); // return Stack(
   }
-
+  buildCircleIndicator() {
+    return Positioned(
+      left: 0.0,
+      right: 0.0,
+      bottom: 0.0,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: CirclePageIndicator(
+          itemCount: 8,
+          currentPageNotifier: _currentPageNotifier2,
+        ),
+      ),
+    );
+  }
   Widget vedicType() {
     return Row(
       children: [
@@ -431,29 +493,27 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget messageIcon(){
+  Widget messageIcon() {
     return Container(
       width: double.infinity,
       alignment: Alignment.topRight,
       margin: EdgeInsets.only(right: 10),
       child: Container(
-            height: 60,
-            width: 60,
-
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Colors.orange[700]),
-            child: const Center(
-              child: const Icon(
-                Icons.message,
-                color: Colors.white,
-              ),
-            ),
+        height: 60,
+        width: 60,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30), color: Colors.orange[700]),
+        child: const Center(
+          child: const Icon(
+            Icons.message,
+            color: Colors.white,
           ),
+        ),
+      ),
     );
   }
 
-  Widget bookIconWithText(){
+  Widget bookIconWithText() {
     return Row(
       children: const [
         SizedBox(
@@ -472,8 +532,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget divider(){
-  return  Container(
+  Widget divider() {
+    return Container(
         width: MediaQuery.of(context).size.width - 20,
         child: const Divider(
           color: Colors.white,
@@ -486,15 +546,15 @@ class _HomeScreenState extends State<HomeScreen> {
         IconButton(
           onPressed: () {
             setState(() {
-              _scrollController.previousItem();
-              // if (listcontroller.offset.toInt() == 0) {
-              //   listPosition = 0;
-              // }
-              // if (listPosition != 0) {
-              //   listPosition--;
-              //   print(listPosition);
-              //   _animateToIndex(listPosition);
-              // }
+              // _scrollController.previousItem();
+              if (listcontroller.offset.toInt() == 0) {
+                listPosition = 0;
+              }
+              if (listPosition != 0) {
+                listPosition--;
+                print(listPosition);
+                _animateToIndex(listPosition);
+              }
             });
           },
           icon: const Icon(
@@ -519,88 +579,82 @@ class _HomeScreenState extends State<HomeScreen> {
                   // width: 60,
                   child: Container(
                     height: 200,
-                    child: InfiniteCarousel.builder(
-                      itemCount: 8,
-                      itemExtent:_itemExtent ?? 40,
-                      scrollBehavior: kIsWeb
-                          ? ScrollConfiguration.of(context).copyWith(
-                        dragDevices: {
-                          // Allows to swipe in web browsers
-                          PointerDeviceKind.touch,
-                          PointerDeviceKind.mouse
-                        },
-                      )
-                          : null,
-                      loop: false,
-                      controller: _scrollController,
-                      onIndexChanged: (index) {
-                        if (_selectedIndex != index) {
-                          setState(() {
-                            _selectedIndex = index;
-                          });
-                        }
-                      },
-                      itemBuilder: (context, itemIndex, realIndex) {
-                              return Column(
-                                children: [
-                                  const SizedBox(
-                                    height: 40,
-                                  ),
-                                  Row(
-                                    children: [
-                                      const SizedBox(
-                                        width: 20,
-                                      ),
-                                      Container(
-                                          height: 120,
-                                          width: 90,
-                                          decoration: BoxDecoration(
-                                            image: const DecorationImage(
-                                                image: AssetImage(
-                                                    'lib/asset/images.jpg'),
-                                                fit: BoxFit.cover),
-                                            borderRadius: BorderRadius.circular(10),
-                                            color: Colors.white,
-                                          ))
-                                    ],
-                                  )
-                                ],
-                              );
-                      },
-                    ),
-                    // child: ListView.builder(
-                    //     controller: listcontroller,
-                    //     scrollDirection: Axis.horizontal,
-                    //     itemCount: 8,
-                    //     itemBuilder: (context, index) {
-                    //       print("index => $index");
-                    //       // listdatachanged = index;
-                    //       return Column(
-                    //         children: [
-                    //           const SizedBox(
-                    //             height: 40,
-                    //           ),
-                    //           Row(
+                    alignment: Alignment.centerLeft,
+                    // child: InfiniteCarousel.builder(
+                    //   itemCount: 8,
+                    //   itemExtent: 130,
+                    //   loop: false,
+                    //   controller: _scrollController,
+                    //   onIndexChanged: (index) {
+                    //     if (_selectedIndex != index) {
+                    //       setState(() {
+                    //         _selectedIndex = index;
+                    //       });
+                    //     }
+                    //   },
+                    //   itemBuilder: (context, itemIndex, realIndex) {
+                    //           return Column(
                     //             children: [
                     //               const SizedBox(
-                    //                 width: 20,
+                    //                 height: 40,
                     //               ),
-                    //               Container(
-                    //                   height: 120,
-                    //                   width: 90,
-                    //                   decoration: BoxDecoration(
-                    //                     image: const DecorationImage(
-                    //                         image: AssetImage(
-                    //                             'lib/asset/images.jpg'),
-                    //                         fit: BoxFit.cover),
-                    //                     borderRadius: BorderRadius.circular(10),
-                    //                     color: Colors.white,
-                    //                   ))
+                    //               Row(
+                    //                 children: [
+                    //                   const SizedBox(
+                    //                     width: 20,
+                    //                   ),
+                    //                   Container(
+                    //                       height: 120,
+                    //                       width: 110,
+                    //                       decoration: BoxDecoration(
+                    //                         image: const DecorationImage(
+                    //                             image: AssetImage(
+                    //                                 'lib/asset/images.jpg'),
+                    //                             fit: BoxFit.cover),
+                    //                         borderRadius: BorderRadius.circular(10),
+                    //                         color: Colors.white,
+                    //                       ))
+                    //                 ],
+                    //               )
                     //             ],
-                    //           )
-                    //         ],
-                    //       );
-                    //     }),
+                    //           );
+                    //   },
+                    // ),
+                    child: ListView.builder(
+                        controller: listcontroller,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 8,
+                        itemBuilder: (context, index) {
+                          print("index => $index");
+                          // listdatachanged = index;
+                          return Column(
+                            children: [
+                              const SizedBox(
+                                height: 40,
+                              ),
+                              Container(
+                                  margin: EdgeInsets.only(left: 20),
+                                  height: 120,
+                                  width: 90,
+                                  decoration: BoxDecoration(
+                                    image: const DecorationImage(
+                                        image:
+                                            AssetImage('lib/asset/images.jpg'),
+                                        fit: BoxFit.cover),
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white,
+                                  )),
+                              Container(
+                                alignment: Alignment.center,
+                                child: const Text(
+                                  'Laal Kitab',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              )
+                            ],
+                          );
+                        }),
                   ),
                 ),
               ],
@@ -609,17 +663,17 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         IconButton(
             onPressed: () {
-              _scrollController.nextItem();
-              // setState(() {
-              //   if (listcontroller.offset.toInt() == 0) {
-              //     listPosition = 1;
-              //   }
-              //   if (listPosition != listcontroller.offset.toInt()) {
-              //     listPosition++;
-              //     print(listPosition);
-              //     _animateToIndex(listPosition);
-              //   }
-              // });
+              // _scrollController.nextItem();
+              setState(() {
+                if (listcontroller.offset.toInt() == 0) {
+                  listPosition = 1;
+                }
+                if (listPosition != listcontroller.offset.toInt()) {
+                  listPosition++;
+                  print(listPosition);
+                  _animateToIndex(listPosition);
+                }
+              });
             },
             icon: const Icon(
               Icons.arrow_forward,
