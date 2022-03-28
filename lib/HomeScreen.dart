@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'package:page_view_indicators/arrow_page_indicator.dart';
-import 'package:page_view_indicators/circle_page_indicator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -66,7 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           Row(
-            // ignore: prefer_const_literals_to_create_immutables
             children: [
               const Icon(Icons.notification_add),
               const SizedBox(
@@ -82,7 +79,6 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Center(
               child: Column(
-                // ignore: prefer_const_literals_to_create_immutables
                 children: [
                   muteIcon(),
                   videoPlayer(),
@@ -107,54 +103,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
 
                   bottomVideoList(),
-                  // SizedBox(height: 10,),
                   viewMoreButton(),
                   const SizedBox(
                     height: 5,
                   ),
-                  Row(
-                    children: [
-                      const Spacer(),
-                      Container(
-                        height: 60,
-                        width: 60,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            color: Colors.orange[700]),
-                        child: const Center(
-                          child: const Icon(
-                            Icons.message,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                    ],
+                   messageIcon(),
+                  const SizedBox(
+                    height: 5,
                   ),
-
-                  Row(
-                    children: const [
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Icon(
-                        Icons.book_outlined,
-                        color: Colors.white,
-                        size: 25,
-                      ),
-                      Text(
-                        "BOOKS",
-                        style: TextStyle(color: Colors.white),
-                      )
-                    ],
-                  ),
-                  Container(
-                      width: MediaQuery.of(context).size.width - 20,
-                      child: const Divider(
-                        color: Colors.white,
-                      )),
+                  bookIconWithText(),
+                  divider(),
                   const SizedBox(
                     height: 10,
                   ),
@@ -165,23 +123,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            // Center(
-            //   child: Column(
-            //     children: [
-            //       SizedBox(
-            //         height: MediaQuery.of(context).size.height * 0.41,
-            //       ),
-            //       Container(
-            //         height: 30,
-            //         width: 100,
-            //         decoration: BoxDecoration(
-            //             borderRadius: BorderRadius.circular(10),
-            //             color: Colors.white),
-            //         child: const Center(child: const Text("Waheguru")),
-            //       )
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),
@@ -231,25 +172,54 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget stackOverLay() {
+
     return Stack(
+      overflow: Overflow.visible,
       children: [
-        Container(
-          height: 150,
-          margin: EdgeInsets.only(left: 15, right: 15),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(40),
-              border: Border.all(color: Colors.white)),
-          child: Center(
-            child: Row(
-              children: [
-                // indicatorPager()
+
+            Container(
+              height: 150,
+              margin: EdgeInsets.only(left: 15, right: 15),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  border: Border.all(color: Colors.white)),
+              child: Center(
+                child: Row(
+                  children: [
+                    // indicatorPager()
+                  ],
+                ),
+              ),
+            ),
+
+        Positioned(
+          top: -15,
+          right: MediaQuery.of(context).size.width/4,
+          left: MediaQuery.of(context).size.width/4,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black54,
+                  blurRadius: 10.0,
+                  spreadRadius: 2.0,
+                  offset: Offset(5.0, 5.0),
+                ),
               ],
+            ),
+            alignment: Alignment.center,
+            width: 30,
+            height: 30,
+            child: Text(
+              'Waheguru',
+              style: TextStyle(fontSize: 18.0, color: Colors.white),
             ),
           ),
         ),
-
       ],
-    );
+    );    // return Stack(
+
   }
 
   Widget vedicType() {
@@ -358,200 +328,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  List<String> _items = [
-    "Namanian\n Tu Maan",
-    "Nanak Chinta\n Mat Karho",
-    "Gur Purai\n Meeri Raakh",
-    "Har Jiyo\n Tu",
-    "Namanian\n Tu Maan",
-    "Nanak Chinta\n Mat Karho",
-    "Gur Purai\n Meeri Raakh",
-    "Har Jiyo\n Tu",
-  ];
-  final _pageController = PageController();
-
-  // final _pageController2 = PageController();
-  final _currentPageNotifier = ValueNotifier<int>(0);
-
-  // final _currentPageNotifier2 = ValueNotifier<int>(0);
-  final _boxHeight = 100.0;
-
-  Widget indicatorPager() {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(left: 20, right: 20),
-      decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.white,
-          ),
-          borderRadius: const BorderRadius.all(const Radius.circular(10))),
-      height: 200,
-      child: ListView(
-        padding: const EdgeInsets.all(8.0),
-        children: <Widget>[
-          ArrowPageIndicator(
-            isJump: false,
-            pageController: _pageController,
-            currentPageNotifier: _currentPageNotifier,
-            leftIcon: const Icon(
-              Icons.chevron_left,
-              color: Colors.white,
-              size: 40,
-            ),
-            rightIcon: const Icon(
-              Icons.chevron_right,
-              color: Colors.white,
-              size: 40,
-            ),
-            itemCount: _items.length,
-            child: _buildPageView(_pageController, _currentPageNotifier),
-          ),
-          _buildCircleIndicator2()
-        ]
-            .map((item) => Padding(
-                  child: item,
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                ))
-            .toList(),
-      ),
-    );
-  }
-
-  var lengthItem = 0.0;
-
-  _buildCircleIndicator2() {
-    if (_items.length > 4) {
-      lengthItem = (_items.length.toDouble() / 4) as double;
-    }
-    return CirclePageIndicator(
-      size: 6.0,
-      selectedSize: 6.0,
-      itemCount: lengthItem.toInt(),
-      currentPageNotifier: _currentPageNotifier,
-    );
-  }
-
-  _buildPageView(
-          PageController pageController, ValueNotifier currentPageNotifier) =>
-      Container(
-        height: _boxHeight,
-        child: PageView.builder(
-            itemCount: lengthItem.toInt(),
-            controller: pageController,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                            child: Column(
-                          children: [
-                            Container(
-                              height: 70,
-                              width: 130,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color:
-                                        const Color.fromRGBO(226, 154, 44, 0.5),
-                                  ),
-                                  borderRadius: const BorderRadius.all(
-                                      const Radius.circular(5))),
-                              child: const Icon(
-                                Icons.music_note_outlined,
-                                size: 40,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const Text("data")
-                          ],
-                        )),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Expanded(
-                            child: Column(
-                          children: [
-                            Container(
-                              height: 50,
-                              width: 80,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color:
-                                        const Color.fromRGBO(226, 154, 44, 0.5),
-                                  ),
-                                  borderRadius: const BorderRadius.all(
-                                      const Radius.circular(5))),
-                              child: const Icon(
-                                Icons.music_note_outlined,
-                                size: 40,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const Text("data")
-                          ],
-                        )),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Expanded(
-                            child: Column(
-                          children: [
-                            Container(
-                              height: 50,
-                              width: 80,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color:
-                                        const Color.fromRGBO(226, 154, 44, 0.5),
-                                  ),
-                                  borderRadius: const BorderRadius.all(
-                                      const Radius.circular(5))),
-                              child: const Icon(
-                                Icons.music_note_outlined,
-                                size: 40,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const Text("data")
-                          ],
-                        )),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Expanded(
-                            child: Column(
-                          children: [
-                            Container(
-                              height: 50,
-                              width: 80,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color:
-                                        const Color.fromRGBO(226, 154, 44, 0.5),
-                                  ),
-                                  borderRadius: const BorderRadius.all(
-                                      const Radius.circular(5))),
-                              child: const Icon(
-                                Icons.music_note_outlined,
-                                size: 40,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const Text("data")
-                          ],
-                        ))
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            },
-            onPageChanged: (int index) {
-              currentPageNotifier.value = index;
-            }),
-      );
-
   Widget buttonMeditation() {
     return Container(
       height: 30,
@@ -622,6 +398,55 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }),
     );
+  }
+
+  Widget messageIcon(){
+    return Container(
+      width: double.infinity,
+      alignment: Alignment.topRight,
+      margin: EdgeInsets.only(right: 10),
+      child: Container(
+            height: 60,
+            width: 60,
+
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: Colors.orange[700]),
+            child: const Center(
+              child: const Icon(
+                Icons.message,
+                color: Colors.white,
+              ),
+            ),
+          ),
+    );
+  }
+
+  Widget bookIconWithText(){
+    return Row(
+      children: const [
+        SizedBox(
+          width: 10,
+        ),
+        Icon(
+          Icons.book_outlined,
+          color: Colors.white,
+          size: 25,
+        ),
+        Text(
+          "BOOKS",
+          style: TextStyle(color: Colors.white),
+        )
+      ],
+    );
+  }
+
+  Widget divider(){
+  return  Container(
+        width: MediaQuery.of(context).size.width - 20,
+        child: const Divider(
+          color: Colors.white,
+        ));
   }
 
   Widget bookList() {
