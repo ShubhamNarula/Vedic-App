@@ -210,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
       overflow: Overflow.visible,
       children: [
         Container(
-          height: 250,
+          height: 180,
           width: MediaQuery.of(context).size.width,
           margin: EdgeInsets.only(left: 15, right: 15),
           decoration: BoxDecoration(
@@ -218,60 +218,12 @@ class _HomeScreenState extends State<HomeScreen> {
               border: Border.all(color: Colors.white)),
           child: Column(
             children: [
-              Row(
-                children: [
-                  ArrowPageIndicator(
-                    iconPadding: EdgeInsets.symmetric(horizontal: 16.0),
-                    isInside: true,
-                    leftIcon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                    ),
-                    rightIcon: const Icon(
-                      Icons.arrow_forward,
-                      color: Colors.white,
-                    ),
-                    pageController: _pageController2,
-                    currentPageNotifier: _currentPageNotifier2,
-                    itemCount: 8,
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 40,
-                        ),
-                        Container(
-                            margin: EdgeInsets.only(left: 20),
-                            height: 120,
-                            width: 90,
-                            decoration: BoxDecoration(
-                              image: const DecorationImage(
-                                  image: AssetImage('lib/asset/images.jpg'),
-                                  fit: BoxFit.cover),
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                            )),
-                        Container(
-                          alignment: Alignment.center,
-                          child: const Text(
-                            'Laal Kitab',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ]
-                    .map((item) => Padding(
-                  child: item,
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
-                ))
-                    .toList(),
-              ),
+              const SizedBox(height: 10,),
+              songList(),
               buildCircleIndicator()
             ],
-
           ),
+
         ),
         Positioned(
           top: -15,
@@ -301,20 +253,102 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     ); // return Stack(
   }
-  buildCircleIndicator() {
-    return Positioned(
-      left: 0.0,
-      right: 0.0,
-      bottom: 0.0,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: CirclePageIndicator(
-          itemCount: 8,
-          currentPageNotifier: _currentPageNotifier2,
-        ),
+
+  final PageController _pageControllerSong = PageController(initialPage: 0);
+  int _selectedTabIndexSong = 0;
+
+  Widget songList() {
+    return Container(
+      height: 120,
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () {
+              if (_selectedTabIndexSong != 0) {
+                _selectedTabIndexSong -= 1;
+                _pageControllerSong.animateToPage(_selectedTabIndexSong,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.ease);
+              }
+            },
+            icon: const Icon(Icons.arrow_back),
+          ),
+          Expanded(
+            child: PageView.builder(
+              controller: _pageControllerSong,
+              onPageChanged: (index) {
+                _selectedTabIndexSong = index;
+              },
+              itemBuilder: (_, index) {
+                return Row(
+                  children: [
+                    songView(index),
+                    const SizedBox(width: 16),
+                    songView(index),
+                    const SizedBox(width: 16),
+                    songView(index),
+                    const SizedBox(width: 16),
+                    songView(index),
+                  ],
+                );
+              },
+              itemCount: 5,
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              if (_selectedTabIndexSong != 5) {
+                _selectedTabIndexSong += 1;
+                _pageControllerSong.animateToPage(_selectedTabIndexSong,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.ease);
+              }
+            },
+            icon: const Icon(Icons.arrow_forward),
+          ),
+        ],
       ),
     );
   }
+
+  buildCircleIndicator() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: CirclePageIndicator(
+        itemCount: 5,
+        currentPageNotifier: _currentPageNotifier2,
+      ),
+    );
+  }
+
+  Widget songView(index){
+    return  Expanded(
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 40,
+          ),
+          Container(
+              height: 50,
+              decoration: BoxDecoration(
+                image: const DecorationImage(
+                    image: AssetImage('lib/asset/images.jpg'),
+                    fit: BoxFit.cover),
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              )),
+          Center(
+            child:  Text(
+              'Song $index',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   Widget vedicType() {
     return Row(
       children: [
@@ -540,146 +574,86 @@ class _HomeScreenState extends State<HomeScreen> {
         ));
   }
 
+  final PageController _pageController = PageController(initialPage: 0);
+  int _selectedTabIndex = 0;
+
   Widget bookList() {
-    return Row(
-      children: [
-        IconButton(
-          onPressed: () {
-            setState(() {
-              // _scrollController.previousItem();
-              if (listcontroller.offset.toInt() == 0) {
-                listPosition = 0;
+    return Container(
+      height: 200,
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () {
+              if (_selectedTabIndex != 0) {
+                _selectedTabIndex -= 1;
+                _pageController.animateToPage(_selectedTabIndex,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.ease);
               }
-              if (listPosition != 0) {
-                listPosition--;
-                print(listPosition);
-                _animateToIndex(listPosition);
-              }
-            });
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
+            },
+            icon: const Icon(Icons.arrow_back),
           ),
-        ),
-        Expanded(
-          child: Container(
-            height: 200,
-            child: PageView(
+          Expanded(
+            child: PageView.builder(
+              controller: _pageController,
               onPageChanged: (index) {
-                setState(() {
-                  pageChange = index;
-                });
-                print(pageChange);
+                _selectedTabIndex = index;
               },
-              controller: pageController,
-              children: [
-                Container(
-                  height: 200,
-                  // width: 60,
-                  child: Container(
-                    height: 200,
-                    alignment: Alignment.centerLeft,
-                    // child: InfiniteCarousel.builder(
-                    //   itemCount: 8,
-                    //   itemExtent: 130,
-                    //   loop: false,
-                    //   controller: _scrollController,
-                    //   onIndexChanged: (index) {
-                    //     if (_selectedIndex != index) {
-                    //       setState(() {
-                    //         _selectedIndex = index;
-                    //       });
-                    //     }
-                    //   },
-                    //   itemBuilder: (context, itemIndex, realIndex) {
-                    //           return Column(
-                    //             children: [
-                    //               const SizedBox(
-                    //                 height: 40,
-                    //               ),
-                    //               Row(
-                    //                 children: [
-                    //                   const SizedBox(
-                    //                     width: 20,
-                    //                   ),
-                    //                   Container(
-                    //                       height: 120,
-                    //                       width: 110,
-                    //                       decoration: BoxDecoration(
-                    //                         image: const DecorationImage(
-                    //                             image: AssetImage(
-                    //                                 'lib/asset/images.jpg'),
-                    //                             fit: BoxFit.cover),
-                    //                         borderRadius: BorderRadius.circular(10),
-                    //                         color: Colors.white,
-                    //                       ))
-                    //                 ],
-                    //               )
-                    //             ],
-                    //           );
-                    //   },
-                    // ),
-                    child: ListView.builder(
-                        controller: listcontroller,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 8,
-                        itemBuilder: (context, index) {
-                          print("index => $index");
-                          // listdatachanged = index;
-                          return Column(
-                            children: [
-                              const SizedBox(
-                                height: 40,
-                              ),
-                              Container(
-                                  margin: EdgeInsets.only(left: 20),
-                                  height: 120,
-                                  width: 90,
-                                  decoration: BoxDecoration(
-                                    image: const DecorationImage(
-                                        image:
-                                            AssetImage('lib/asset/images.jpg'),
-                                        fit: BoxFit.cover),
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white,
-                                  )),
-                              Container(
-                                alignment: Alignment.center,
-                                child: const Text(
-                                  'Laal Kitab',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              )
-                            ],
-                          );
-                        }),
-                  ),
-                ),
-              ],
+              itemBuilder: (_, index) {
+                return Row(
+                  children: [
+                    laalKitab(index),
+                    const SizedBox(width: 16),
+                    laalKitab(index),
+                    const SizedBox(width: 16),
+                    laalKitab(index),
+                  ],
+                );
+              },
+              itemCount: 5,
             ),
           ),
-        ),
-        IconButton(
+          IconButton(
             onPressed: () {
-              // _scrollController.nextItem();
-              setState(() {
-                if (listcontroller.offset.toInt() == 0) {
-                  listPosition = 1;
-                }
-                if (listPosition != listcontroller.offset.toInt()) {
-                  listPosition++;
-                  print(listPosition);
-                  _animateToIndex(listPosition);
-                }
-              });
+              if (_selectedTabIndex != 5) {
+                _selectedTabIndex += 1;
+                _pageController.animateToPage(_selectedTabIndex,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.ease);
+              }
             },
-            icon: const Icon(
-              Icons.arrow_forward,
-              color: Colors.white,
-            )),
-      ],
+            icon: const Icon(Icons.arrow_forward),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget laalKitab(index){
+    return  Expanded(
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 40,
+          ),
+          Container(
+              height: 120,
+              decoration: BoxDecoration(
+                image: const DecorationImage(
+                    image: AssetImage('lib/asset/images.jpg'),
+                    fit: BoxFit.cover),
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              )),
+          Center(
+            child:  Text(
+              'Laal Kitab $index',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
