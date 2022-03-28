@@ -1,5 +1,9 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:infinite_carousel/infinite_carousel.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,9 +19,36 @@ class _HomeScreenState extends State<HomeScreen> {
   int pageChange = 0;
   int listPosition = 1;
   final double _height = 100.0;
+  // Wheater to loop through elements
+  bool _loop = true;
+
+  // Scroll controller for carousel
+   late InfiniteScrollController _scrollController;
+
+  // Maintain current index of carousel
+  int _selectedIndex = 0;
+
+  // Width of each item
+  double? _itemExtent;
+
+  // Get screen width of viewport.
+  double get screenWidth => MediaQuery.of(context).size.width;
+
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _itemExtent = screenWidth-400;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+  }
+  @override
   void initState() {
+    _scrollController = InfiniteScrollController(initialItem: _selectedIndex);
     super.initState();
     _controller = YoutubePlayerController(
         initialVideoId: 'JBajCwwaksc',
@@ -455,14 +486,15 @@ class _HomeScreenState extends State<HomeScreen> {
         IconButton(
           onPressed: () {
             setState(() {
-              if (listcontroller.offset.toInt() == 0) {
-                listPosition = 0;
-              }
-              if (listPosition != 0) {
-                listPosition--;
-                print(listPosition);
-                _animateToIndex(listPosition);
-              }
+              _scrollController.previousItem();
+              // if (listcontroller.offset.toInt() == 0) {
+              //   listPosition = 0;
+              // }
+              // if (listPosition != 0) {
+              //   listPosition--;
+              //   print(listPosition);
+              //   _animateToIndex(listPosition);
+              // }
             });
           },
           icon: const Icon(
@@ -487,39 +519,88 @@ class _HomeScreenState extends State<HomeScreen> {
                   // width: 60,
                   child: Container(
                     height: 200,
-                    child: ListView.builder(
-                        controller: listcontroller,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 8,
-                        itemBuilder: (context, index) {
-                          print("index => $index");
-                          // listdatachanged = index;
-                          return Column(
-                            children: [
-                              const SizedBox(
-                                height: 40,
-                              ),
-                              Row(
+                    child: InfiniteCarousel.builder(
+                      itemCount: 8,
+                      itemExtent:_itemExtent ?? 40,
+                      scrollBehavior: kIsWeb
+                          ? ScrollConfiguration.of(context).copyWith(
+                        dragDevices: {
+                          // Allows to swipe in web browsers
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse
+                        },
+                      )
+                          : null,
+                      loop: false,
+                      controller: _scrollController,
+                      onIndexChanged: (index) {
+                        if (_selectedIndex != index) {
+                          setState(() {
+                            _selectedIndex = index;
+                          });
+                        }
+                      },
+                      itemBuilder: (context, itemIndex, realIndex) {
+                              return Column(
                                 children: [
                                   const SizedBox(
-                                    width: 20,
+                                    height: 40,
                                   ),
-                                  Container(
-                                      height: 120,
-                                      width: 90,
-                                      decoration: BoxDecoration(
-                                        image: const DecorationImage(
-                                            image: AssetImage(
-                                                'lib/asset/images.jpg'),
-                                            fit: BoxFit.cover),
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.white,
-                                      ))
+                                  Row(
+                                    children: [
+                                      const SizedBox(
+                                        width: 20,
+                                      ),
+                                      Container(
+                                          height: 120,
+                                          width: 90,
+                                          decoration: BoxDecoration(
+                                            image: const DecorationImage(
+                                                image: AssetImage(
+                                                    'lib/asset/images.jpg'),
+                                                fit: BoxFit.cover),
+                                            borderRadius: BorderRadius.circular(10),
+                                            color: Colors.white,
+                                          ))
+                                    ],
+                                  )
                                 ],
-                              )
-                            ],
-                          );
-                        }),
+                              );
+                      },
+                    ),
+                    // child: ListView.builder(
+                    //     controller: listcontroller,
+                    //     scrollDirection: Axis.horizontal,
+                    //     itemCount: 8,
+                    //     itemBuilder: (context, index) {
+                    //       print("index => $index");
+                    //       // listdatachanged = index;
+                    //       return Column(
+                    //         children: [
+                    //           const SizedBox(
+                    //             height: 40,
+                    //           ),
+                    //           Row(
+                    //             children: [
+                    //               const SizedBox(
+                    //                 width: 20,
+                    //               ),
+                    //               Container(
+                    //                   height: 120,
+                    //                   width: 90,
+                    //                   decoration: BoxDecoration(
+                    //                     image: const DecorationImage(
+                    //                         image: AssetImage(
+                    //                             'lib/asset/images.jpg'),
+                    //                         fit: BoxFit.cover),
+                    //                     borderRadius: BorderRadius.circular(10),
+                    //                     color: Colors.white,
+                    //                   ))
+                    //             ],
+                    //           )
+                    //         ],
+                    //       );
+                    //     }),
                   ),
                 ),
               ],
@@ -528,17 +609,17 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         IconButton(
             onPressed: () {
-              setState(() {
-                print(listPosition);
-                if (listcontroller.offset.toInt() == 0) {
-                  listPosition = 1;
-                }
-                if (listPosition != listcontroller.offset.toInt()) {
-                  listPosition++;
-                  print(listPosition);
-                  _animateToIndex(listPosition);
-                }
-              });
+              _scrollController.nextItem();
+              // setState(() {
+              //   if (listcontroller.offset.toInt() == 0) {
+              //     listPosition = 1;
+              //   }
+              //   if (listPosition != listcontroller.offset.toInt()) {
+              //     listPosition++;
+              //     print(listPosition);
+              //     _animateToIndex(listPosition);
+              //   }
+              // });
             },
             icon: const Icon(
               Icons.arrow_forward,
