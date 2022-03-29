@@ -1,10 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:page_view_indicators/page_view_indicators.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'package:infinite_carousel/infinite_carousel.dart';
-import 'package:page_view_indicators/arrow_page_indicator.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,43 +15,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late YoutubePlayerController _controller;
   final ScrollController listcontroller = ScrollController();
-  PageController pageController = PageController(initialPage: 0);
-  int pageChange = 0;
-  int listPosition = 1;
-  final double _height = 100.0;
-  final _pageController2 = PageController();
-  final _currentPageNotifier2 = ValueNotifier<int>(0);
-
-  // Wheater to loop through elements
-  bool _loop = true;
-
-  // Scroll controller for carousel
-  late InfiniteScrollController _scrollController;
-
-  // Maintain current index of carousel
-  int _selectedIndex = 0;
-
-  // Width of each item
-  double? _itemExtent;
-
-  // Get screen width of viewport.
-  double get screenWidth => MediaQuery.of(context).size.width;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _itemExtent = screenWidth;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _scrollController.dispose();
-  }
 
   @override
   void initState() {
-    _scrollController = InfiniteScrollController(initialItem: _selectedIndex);
     super.initState();
     _controller = YoutubePlayerController(
         initialVideoId: 'JBajCwwaksc',
@@ -66,14 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
           enableCaption: true,
         ))
       ..addListener(() {});
-  }
-
-  void _animateToIndex(int index) {
-    listcontroller.animateTo(
-      index * _height,
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.fastOutSlowIn,
-    );
   }
 
   @override
@@ -278,6 +235,11 @@ class _HomeScreenState extends State<HomeScreen> {
               controller: _pageControllerSong,
               onPageChanged: (index) {
                 _selectedTabIndexSong = index;
+                setState(() {
+                 _selectedTabIndexSong = index;
+                });
+
+
               },
               itemBuilder: (_, index) {
                 return Row(
@@ -312,13 +274,22 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   buildCircleIndicator() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: CirclePageIndicator(
-        itemCount: 5,
-        currentPageNotifier: _currentPageNotifier2,
+    return SmoothPageIndicator(
+      controller: _pageControllerSong,
+      count:  5,
+      axisDirection: Axis.horizontal,
+      effect:  SlideEffect(
+          spacing:  8.0,
+          radius:  4.0,
+          dotWidth:  8.0,
+          dotHeight:  8.0,
+          paintStyle:  PaintingStyle.fill,
+          strokeWidth:  1.5,
+          dotColor:  Colors.black12,
+          activeDotColor:  Colors.grey
       ),
     );
+
   }
 
   Widget songView(index){
