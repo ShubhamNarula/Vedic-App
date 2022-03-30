@@ -68,20 +68,12 @@ class _HomeScreenState extends State<HomeScreen> {
       ..addListener(() {});
   }
 
-  void _animateToIndex(int index) {
-    listcontroller.animateTo(
-      index * _height,
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.fastOutSlowIn,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.orange,
         elevation: 0,
         // ignore: prefer_const_literals_to_create_immutables
         title: Row(
@@ -109,55 +101,63 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       backgroundColor: Colors.orange,
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            Center(
-              child: Column(
-                children: [
-                  muteIcon(),
-                  videoPlayer(),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  viewMoreButton(),
-                  const SizedBox(
-                    height: 33,
-                  ),
-                  stackOverLay(),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  vedicType(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  buttonMeditation(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  bottomVideoList(),
-                  viewMoreButton(),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  messageIcon(),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  bookIconWithText(),
-                  divider(),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  bookList(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                ],
+      body: Container(
+        // decoration: BoxDecoration(
+        //   image: DecorationImage(
+        //     image: AssetImage("assets/images/splash.png"),
+        //     fit: BoxFit.cover,
+        //   ),
+        // ),
+        child: SingleChildScrollView(
+          child: Stack(
+            children: [
+              Center(
+                child: Column(
+                  children: [
+                    muteIcon(),
+                    videoPlayer(),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    viewMoreButton(),
+                    const SizedBox(
+                      height: 33,
+                    ),
+                    stackOverLay(),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    vedicType(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    buttonMeditation(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    bottomVideoList(),
+                    viewMoreButton(),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    messageIcon(),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    bookIconWithText(),
+                    divider(),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    bookList(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -218,12 +218,13 @@ class _HomeScreenState extends State<HomeScreen> {
               border: Border.all(color: Colors.white)),
           child: Column(
             children: [
-              const SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
               songList(),
               buildCircleIndicator()
             ],
           ),
-
         ),
         Positioned(
           top: -15,
@@ -231,12 +232,15 @@ class _HomeScreenState extends State<HomeScreen> {
           left: MediaQuery.of(context).size.width / 4,
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              image: const DecorationImage(
+                  image: AssetImage('assets/images/gurubani_1.png'),
+                  fit: BoxFit.cover),
+              // color: Colors.blue,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black54,
-                  blurRadius: 10.0,
-                  spreadRadius: 2.0,
+                  blurRadius: 12.0,
+                  spreadRadius: 1.0,
                   offset: Offset(5.0, 5.0),
                 ),
               ],
@@ -271,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     curve: Curves.ease);
               }
             },
-            icon: const Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back,color: Colors.white,),
           ),
           Expanded(
             child: PageView.builder(
@@ -304,7 +308,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     curve: Curves.ease);
               }
             },
-            icon: const Icon(Icons.arrow_forward),
+            icon: const Icon(Icons.arrow_forward,color: Colors.white,),
           ),
         ],
       ),
@@ -321,8 +325,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget songView(index){
-    return  Expanded(
+  Widget songView(index) {
+    return Expanded(
       child: Column(
         children: [
           const SizedBox(
@@ -332,13 +336,13 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 50,
               decoration: BoxDecoration(
                 image: const DecorationImage(
-                    image: AssetImage('lib/asset/images.jpg'),
+                    image: AssetImage('assets/images/om.png'),
                     fit: BoxFit.cover),
                 borderRadius: BorderRadius.circular(10),
                 color: Colors.white,
               )),
           Center(
-            child:  Text(
+            child: Text(
               'Song $index',
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white),
@@ -356,22 +360,12 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               Container(
-                height: 70,
-                width: 70,
+                height: 100,
+                width: 100,
                 decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(40),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        spreadRadius: 1,
-                        blurRadius: 1,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
-                      ),
-                    ]),
-                child: const Center(
-                  child: Icon(Icons.mediation_outlined, size: 30),
+                  image: const DecorationImage(
+                      image: AssetImage('assets/images/yoga.png'),
+                      fit: BoxFit.cover),
                 ),
               ),
               const SizedBox(
@@ -388,25 +382,12 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               Container(
-                height: 70,
-                width: 70,
+                height: 100,
+                width: 100,
                 decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(40),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        spreadRadius: 1,
-                        blurRadius: 1,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
-                      ),
-                    ]),
-                child: const Center(
-                  child: Icon(
-                    Icons.mediation_outlined,
-                    size: 30,
-                  ),
+                  image: const DecorationImage(
+                      image: AssetImage('assets/images/spritual.png'),
+                      fit: BoxFit.cover),
                 ),
               ),
               const SizedBox(
@@ -423,22 +404,12 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               Container(
-                height: 70,
-                width: 70,
+                height: 100,
+                width: 100,
                 decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(40),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        spreadRadius: 1,
-                        blurRadius: 1,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
-                      ),
-                    ]),
-                child: const Center(
-                  child: Icon(Icons.mediation_outlined, size: 30),
+                  image: const DecorationImage(
+                      image: AssetImage('assets/images/astro.png'),
+                      fit: BoxFit.cover),
                 ),
               ),
               const SizedBox(
@@ -489,8 +460,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Container(
                             decoration: BoxDecoration(
                                 image: const DecorationImage(
-                                    image: AssetImage(
-                                        'lib/asset/Dhansikhi-Mobile-Wallpaper-I-Love-Waheguru.jpg'),
+                                    image: AssetImage('assets/images/om.png'),
                                     fit: BoxFit.cover),
                                 border: Border.all(color: Colors.blueAccent),
                                 borderRadius: BorderRadius.circular(10)),
@@ -502,19 +472,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: 180,
                             width: 120,
                             child: Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  color: Colors.orange),
-                              child: const Center(
-                                child: const Icon(
-                                  Icons.play_arrow,
-                                  color: Colors.white,
-                                  size: 30,
-                                ),
-                              ),
-                            ),
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                    image: const DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/play.png'),
+                                        fit: BoxFit.cover),
+                                    border: Border.all(color: Colors.orange),
+                                    borderRadius: BorderRadius.circular(30))),
                           )
                         ],
                       ),
@@ -553,10 +519,13 @@ class _HomeScreenState extends State<HomeScreen> {
         SizedBox(
           width: 10,
         ),
-        Icon(
-          Icons.book_outlined,
-          color: Colors.white,
-          size: 25,
+        Image(
+          image: AssetImage('assets/images/books.png'),
+          height: 25,
+          width: 25,
+        ),
+        SizedBox(
+          width: 10,
         ),
         Text(
           "BOOKS",
@@ -591,7 +560,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     curve: Curves.ease);
               }
             },
-            icon: const Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back,color: Colors.white,),
           ),
           Expanded(
             child: PageView.builder(
@@ -622,15 +591,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     curve: Curves.ease);
               }
             },
-            icon: const Icon(Icons.arrow_forward),
+            icon: const Icon(Icons.arrow_forward,color: Colors.white,),
           ),
         ],
       ),
     );
   }
 
-  Widget laalKitab(index){
-    return  Expanded(
+  Widget laalKitab(index) {
+    return Expanded(
       child: Column(
         children: [
           const SizedBox(
@@ -640,13 +609,13 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 120,
               decoration: BoxDecoration(
                 image: const DecorationImage(
-                    image: AssetImage('lib/asset/images.jpg'),
+                    image: AssetImage('assets/images/lal-kitab.png'),
                     fit: BoxFit.cover),
                 borderRadius: BorderRadius.circular(10),
                 color: Colors.white,
               )),
           Center(
-            child:  Text(
+            child: Text(
               'Laal Kitab $index',
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white),
