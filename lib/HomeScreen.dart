@@ -67,12 +67,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       backgroundColor: Colors.orange,
       body: Container(
-        // decoration: BoxDecoration(
-        //   image: DecorationImage(
-        //     image: AssetImage("assets/images/splash.png"),
-        //     fit: BoxFit.cover,
-        //   ),
-        // ),
         child: SingleChildScrollView(
           child: Stack(
             children: [
